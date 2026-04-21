@@ -1,7 +1,10 @@
 import React from 'react'
 import LoginForm from '../../components/forms/LoginForm'
-
+import { useEffect, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { getDashboardRoute } from "../../utils/roleRedirect";
 const Login = () => {
+  
   return (
     <>
     <LoginForm />
