@@ -1,20 +1,15 @@
-import React, { useContext, useState ,useEffect} from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext';
 import {loginUser} from "../../services/authService.js"
 import { Link } from 'react-router-dom';
-import { getDashboardRoute } from "../../utils/roleRedirect";
 
 const LoginForm = () => {
   const navigate = useNavigate();
 
-  const {login,user} = useContext(AuthContext)
+  const {login} = useContext(AuthContext)
   
-  useEffect(() => {
-    if (user) {
-      navigate(getDashboardRoute(user.Role));
-    }
-  }, [user]);
+
   const [data,setData] = useState({
     email:"",
     password:""
@@ -32,8 +27,27 @@ const handleSubmit = async (e) => {
 
     login(res.data);
 
-    const redirectPath = getDashboardRoute(res.data.Role);
-    navigate(redirectPath);
+    switch(res.data.role){
+      case "Admin":
+        navigate("/admin")
+        break;
+
+      case "Patient":
+      case "Guardian":
+        navigate("/patient")
+        break;
+
+      case "Doctor":
+        navigate("/doctor")
+        break;
+
+      case "Receptionist":
+        navigate("/receptionist")
+        break;
+
+      default:
+        navigate("/")
+    }
 
   } catch {
     alert("Invalid credentials");

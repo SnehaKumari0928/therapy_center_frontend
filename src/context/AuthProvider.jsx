@@ -9,7 +9,12 @@ const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem("user");
 
     if (storedUser && storedUser !== "undefined") {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      if (parsedUser && parsedUser.role) {
+        setUser(parsedUser);
+      } else {
+        setUser(null);
+      }
     } else {
       setUser(null);
     }
@@ -24,8 +29,8 @@ const AuthProvider = ({ children }) => {
 
   const login = (data) => {
     localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    setUser(data.user);
+    localStorage.setItem("user", JSON.stringify(data));
+    setUser(data);
   };
 
   const logout = () => {
